@@ -5,3 +5,8 @@ export interface ListTasksResponse {
   done: boolean;
   createdAt: string;
 }
+
+export interface CreateTask {
+  title: string;
+  description: string;
+}

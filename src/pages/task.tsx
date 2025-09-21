@@ -14,6 +14,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
+import { useCreateTask } from "@/hooks/mutations/use-create-task";
+import { toast } from "sonner";
 
 const activeTabs = {
   INCOMPLETE: "incomplete",
@@ -24,6 +26,7 @@ export type ActiveTabs = (typeof activeTabs)[keyof typeof activeTabs];
 
 export function Tasks() {
   const { data: tasks } = useListTasks();
+  const createTaskMutation = useCreateTask();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(activeTabs.INCOMPLETE);
   const [newTaskTitle, setNewTaskTitle] = useState("");
@@ -31,15 +34,23 @@ export function Tasks() {
 
   const handleAddTask = () => {
     if (!newTaskTitle.trim() || !newTaskDescription.trim()) {
-      console.log("Title and description cannot be empty");
+      toast.warning("Title and description cannot be empty");
       return;
     }
-    console.log("Adding task:", {
-      title: newTaskTitle,
-      description: newTaskDescription,
-    });
-    setNewTaskTitle("");
-    setNewTaskDescription("");
+
+    createTaskMutation.mutate(
+      { title: newTaskTitle, description: newTaskDescription },
+      {
+        onSuccess: () => {
+          toast.success("Task created successfully");
+          setNewTaskTitle("");
+          setNewTaskDescription("");
+        },
+        onError: () => {
+          toast.error("Failed to create task");
+        },
+      }
+    );
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +75,7 @@ export function Tasks() {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Tasks Page</h1>
 
+      {/* Search */}
       <div className="flex gap-2 mb-4">
         <Input
           placeholder="Search tasks..."
@@ -94,12 +106,18 @@ export function Tasks() {
               />
             </div>
             <SheetFooter>
-              <Button onClick={handleAddTask}>Create Task</Button>
+              <Button
+                onClick={handleAddTask}
+                disabled={createTaskMutation.isPending}
+              >
+                {createTaskMutation.isPending ? "Creating..." : "Create Task"}
+              </Button>
             </SheetFooter>
           </SheetContent>
         </Sheet>
       </div>
 
+      {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="incomplete">Incomplete</TabsTrigger>
