@@ -121,8 +121,8 @@ export function Tasks() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="incomplete">Incomplete</TabsTrigger>
-          <TabsTrigger value="complete">Complete</TabsTrigger>
+          <TabsTrigger value="incomplete">Not completed</TabsTrigger>
+          <TabsTrigger value="complete">Completed</TabsTrigger>
         </TabsList>
 
         <TabsContent value="incomplete">

@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Button } from "./ui/button";
+import { CheckCircle } from "lucide-react";
 
 export function TaskList({
   tasks,
@@ -24,7 +25,9 @@ export function TaskList({
       {tasks.map((task) => (
         <Card
           key={task.id}
-          className="relative p-4 border border-transparent hover:border-blue-500 hover:animate-border-spin"
+          className={`relative border border-transparent hover:border-blue-500 hover:animate-border-spin ${
+            task.done ? "opacity-50 pointer-events-none" : ""
+          } group`} // Adiciona a classe "group" para o hover
         >
           <CardHeader>
             <CardTitle className="text-lg font-bold">{task.title}</CardTitle>
@@ -33,9 +36,14 @@ export function TaskList({
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-end">
-            <Button onClick={() => onToggleComplete(task.id)}>
-              Mark as Complete
-            </Button>
+            {!task.done && (
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Button onClick={() => onToggleComplete(task.id)}>
+                  <CheckCircle />
+                  Conclude
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       ))}
