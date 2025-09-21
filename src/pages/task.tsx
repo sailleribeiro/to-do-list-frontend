@@ -15,10 +15,17 @@ import {
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 
+const activeTabs = {
+  INCOMPLETE: "incomplete",
+  COMPLETE: "complete",
+};
+
+export type ActiveTabs = (typeof activeTabs)[keyof typeof activeTabs];
+
 export function Tasks() {
   const { data: tasks } = useListTasks();
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("incomplete");
+  const [activeTab, setActiveTab] = useState(activeTabs.INCOMPLETE);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDescription, setNewTaskDescription] = useState("");
 
@@ -50,7 +57,7 @@ export function Tasks() {
     ) || [];
 
   const displayedTasks = filteredTasks.filter((task: any) =>
-    activeTab === "incomplete" ? !task.completed : task.completed
+    activeTab === activeTabs.INCOMPLETE ? !task.completed : task.completed
   );
 
   return (
