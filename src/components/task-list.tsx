@@ -27,7 +27,7 @@ export function TaskList({
           key={task.id}
           className={`relative border border-transparent hover:border-blue-500 hover:animate-border-spin ${
             task.done ? "opacity-50 pointer-events-none" : ""
-          } group`} // Adiciona a classe "group" para o hover
+          } group`}
         >
           <CardHeader>
             <CardTitle className="text-lg font-bold">{task.title}</CardTitle>
