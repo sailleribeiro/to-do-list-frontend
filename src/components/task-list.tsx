@@ -1,3 +1,4 @@
+import type { ListTasksResponse } from "@/services/tasks/tasks-types";
 import { Card, CardContent } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 
@@ -5,7 +6,7 @@ export function TaskList({
   tasks,
   onToggleComplete,
 }: {
-  tasks: any[];
+  tasks: ListTasksResponse[];
   onToggleComplete: (taskId: string) => void;
 }) {
   if (tasks.length === 0) {
@@ -18,7 +19,7 @@ export function TaskList({
         <Card key={task.id} className="flex gap-2">
           <CardContent className="flex items-center gap-4">
             <Checkbox
-              checked={task.completed}
+              checked={task.done}
               onCheckedChange={() => onToggleComplete(task.id)}
             />
             <span>{task.title}</span>

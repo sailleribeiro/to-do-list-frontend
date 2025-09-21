@@ -6,7 +6,7 @@ export interface ListTasksResponse {
   createdAt: string;
 }
 
-export interface CreateTask {
+export interface Task {
   title: string;
   description: string;
 }

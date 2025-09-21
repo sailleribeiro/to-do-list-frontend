@@ -16,6 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateTask } from "@/hooks/mutations/use-create-task";
 import { toast } from "sonner";
+import type { ListTasksResponse } from "@/services/tasks/tasks-types";
 
 const activeTabs = {
   INCOMPLETE: "incomplete",
@@ -63,12 +64,12 @@ export function Tasks() {
   };
 
   const filteredTasks =
-    tasks?.filter((task: any) =>
+    tasks?.filter((task: ListTasksResponse) =>
       task.title.toLowerCase().includes(search.toLowerCase())
     ) || [];
 
-  const displayedTasks = filteredTasks.filter((task: any) =>
-    activeTab === activeTabs.INCOMPLETE ? !task.completed : task.completed
+  const displayedTasks = filteredTasks.filter((task: ListTasksResponse) =>
+    activeTab === activeTabs.INCOMPLETE ? !task.done : task.done
   );
 
   return (
