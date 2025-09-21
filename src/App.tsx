@@ -1,12 +1,14 @@
-import { ThemeProvider } from "@/components/theme-provider";
-import { Button } from "@/components/ui/button";
+import { ThemeProvider } from "@/contexts/theme-provider";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/react-query";
+import { Tasks } from "./pages/task";
 
 export function App() {
   return (
-    <ThemeProvider>
-      <div className="flex min-h-svh flex-col items-center justify-center">
-        <Button onClick={() => alert("Button clicked!")}>Click me</Button>
-      </div>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <Tasks />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
