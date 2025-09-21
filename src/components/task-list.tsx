@@ -8,14 +8,11 @@ import {
 } from "./ui/card";
 import { Button } from "./ui/button";
 import { CheckCircle } from "lucide-react";
+import { useDoneTask } from "@/hooks/mutations/use-done-task";
 
-export function TaskList({
-  tasks,
-  onToggleComplete,
-}: {
-  tasks: ListTasksResponse[];
-  onToggleComplete: (taskId: string) => void;
-}) {
+export function TaskList({ tasks }: { tasks: ListTasksResponse[] }) {
+  const { mutate: markAsDone, isPending } = useDoneTask();
+
   if (tasks.length === 0) {
     return <p>No tasks found.</p>;
   }
@@ -38,9 +35,12 @@ export function TaskList({
           <CardContent className="flex justify-end">
             {!task.done && (
               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button onClick={() => onToggleComplete(task.id)}>
+                <Button
+                  onClick={() => markAsDone(task.id)}
+                  disabled={isPending}
+                >
                   <CheckCircle />
-                  Conclude
+                  {isPending ? "Marking..." : "Conclude"}
                 </Button>
               </div>
             )}

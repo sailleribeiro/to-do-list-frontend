@@ -59,10 +59,6 @@ export function Tasks() {
     console.log("Searching for:", e.target.value);
   };
 
-  const handleToggleComplete = (taskId: string) => {
-    console.log("Toggling task completion for:", taskId);
-  };
-
   const filteredTasks =
     tasks?.filter((task: ListTasksResponse) =>
       task.title.toLowerCase().includes(search.toLowerCase())
@@ -126,16 +122,10 @@ export function Tasks() {
         </TabsList>
 
         <TabsContent value="incomplete">
-          <TaskList
-            tasks={displayedTasks}
-            onToggleComplete={handleToggleComplete}
-          />
+          <TaskList tasks={displayedTasks} />
         </TabsContent>
         <TabsContent value="complete">
-          <TaskList
-            tasks={displayedTasks}
-            onToggleComplete={handleToggleComplete}
-          />
+          <TaskList tasks={displayedTasks} />
         </TabsContent>
       </Tabs>
     </div>
