@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
 
 export function TaskList({
