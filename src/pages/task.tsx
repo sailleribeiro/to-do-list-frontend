@@ -26,7 +26,7 @@ const activeTabs = {
 export type ActiveTabs = (typeof activeTabs)[keyof typeof activeTabs];
 
 export function Tasks() {
-  const { data: tasks } = useListTasks();
+  const { data: tasks, isLoading } = useListTasks(); // Adiciona o estado de carregamento
   const createTaskMutation = useCreateTask();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(activeTabs.INCOMPLETE);
@@ -56,13 +56,13 @@ export function Tasks() {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-    console.log("Searching for:", e.target.value);
   };
 
-  const filteredTasks =
-    tasks?.filter((task: ListTasksResponse) =>
-      task.title.toLowerCase().includes(search.toLowerCase())
-    ) || [];
+  const filteredTasks = Array.isArray(tasks)
+    ? tasks.filter((task: ListTasksResponse) =>
+        task.title.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
 
   const displayedTasks = filteredTasks.filter((task: ListTasksResponse) =>
     activeTab === activeTabs.INCOMPLETE ? !task.done : task.done
@@ -72,62 +72,77 @@ export function Tasks() {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Tasks Page</h1>
 
-      {/* Search */}
-      <div className="flex gap-2 mb-4">
-        <Input
-          placeholder="Search tasks..."
-          value={search}
-          onChange={handleSearch}
-        />
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button>Add Task</Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Add New Task</SheetTitle>
-              <SheetDescription>
-                Fill in the details below to create a new task.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="space-y-4 p-4">
-              <Input
-                placeholder="Task Title"
-                value={newTaskTitle}
-                onChange={(e) => setNewTaskTitle(e.target.value)}
-              />
-              <Textarea
-                placeholder="Task Description"
-                value={newTaskDescription}
-                onChange={(e) => setNewTaskDescription(e.target.value)}
-              />
-            </div>
-            <SheetFooter>
-              <Button
-                onClick={handleAddTask}
-                disabled={createTaskMutation.isPending}
-              >
-                {createTaskMutation.isPending ? "Creating..." : "Create Task"}
-              </Button>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      </div>
+      {/* Loading State */}
+      {isLoading ? (
+        <p>Loading tasks...</p>
+      ) : (
+        <>
+          <div className="flex gap-2 mb-4">
+            <Input
+              placeholder="Search tasks..."
+              value={search}
+              onChange={handleSearch}
+            />
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button>Add Task</Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Add New Task</SheetTitle>
+                  <SheetDescription>
+                    Fill in the details below to create a new task.
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="space-y-4 p-4">
+                  <Input
+                    placeholder="Task Title"
+                    value={newTaskTitle}
+                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                  />
+                  <Textarea
+                    placeholder="Task Description"
+                    value={newTaskDescription}
+                    onChange={(e) => setNewTaskDescription(e.target.value)}
+                  />
+                </div>
+                <SheetFooter>
+                  <Button
+                    onClick={handleAddTask}
+                    disabled={createTaskMutation.isPending}
+                  >
+                    {createTaskMutation.isPending
+                      ? "Creating..."
+                      : "Create Task"}
+                  </Button>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
+          </div>
 
-      {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="incomplete">Not completed</TabsTrigger>
-          <TabsTrigger value="complete">Completed</TabsTrigger>
-        </TabsList>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList>
+              <TabsTrigger value="incomplete">Not completed</TabsTrigger>
+              <TabsTrigger value="complete">Completed</TabsTrigger>
+            </TabsList>
 
-        <TabsContent value="incomplete">
-          <TaskList tasks={displayedTasks} />
-        </TabsContent>
-        <TabsContent value="complete">
-          <TaskList tasks={displayedTasks} />
-        </TabsContent>
-      </Tabs>
+            <TabsContent value="incomplete">
+              {displayedTasks.length > 0 ? (
+                <TaskList tasks={displayedTasks} />
+              ) : (
+                <p>No incomplete tasks found.</p>
+              )}
+            </TabsContent>
+            <TabsContent value="complete">
+              {displayedTasks.length > 0 ? (
+                <TaskList tasks={displayedTasks} />
+              ) : (
+                <p>No completed tasks found.</p>
+              )}
+            </TabsContent>
+          </Tabs>
+        </>
+      )}
     </div>
   );
 }

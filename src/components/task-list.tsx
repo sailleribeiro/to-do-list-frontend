@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Button } from "./ui/button";
-import { CheckCircle, Trash2 } from "lucide-react";
+import { SquareCheckBig, Trash2 } from "lucide-react";
 import { useDoneTask } from "@/hooks/mutations/use-done-task";
 import { useDeleteTask } from "@/hooks/mutations/use-delete-task";
 import {
@@ -19,7 +19,6 @@ import {
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-import { toast } from "sonner";
 
 export function TaskList({ tasks }: { tasks: ListTasksResponse[] }) {
   const { mutate: markAsDone, isPending } = useDoneTask();
@@ -37,10 +36,6 @@ export function TaskList({ tasks }: { tasks: ListTasksResponse[] }) {
       onSuccess: () => {
         setSelectedTaskId(null);
         setOpenModal(false);
-        toast.success("Task deleted successfully");
-      },
-      onError: () => {
-        toast.error("Failed to delete task");
       },
     });
   };
@@ -66,24 +61,24 @@ export function TaskList({ tasks }: { tasks: ListTasksResponse[] }) {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex justify-between items-center">
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Button
+                  variant="destructive"
+                  onClick={() => handleOpenModal(task.id)}
+                >
+                  <Trash2 />
+                </Button>
+              </div>
+
               {!task.done && (
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <Button
-                    onClick={() => markAsDone(task.id)}
-                    disabled={isPending}
-                  >
-                    <CheckCircle />
-                    {isPending ? "Marking..." : "Conclude"}
-                  </Button>
-                </div>
+                <Button
+                  onClick={() => markAsDone(task.id)}
+                  disabled={isPending}
+                >
+                  <SquareCheckBig />
+                  {isPending ? "Marking..." : "Conclude"}
+                </Button>
               )}
-              <Button
-                variant="destructive"
-                onClick={() => handleOpenModal(task.id)}
-              >
-                <Trash2 />
-                Delete
-              </Button>
             </CardContent>
           </Card>
         ))}
@@ -99,7 +94,7 @@ export function TaskList({ tasks }: { tasks: ListTasksResponse[] }) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button variant="outline" onClick={() => setSelectedTaskId(null)}>
+            <Button variant="outline" onClick={() => setOpenModal(false)}>
               Cancel
             </Button>
             <Button
