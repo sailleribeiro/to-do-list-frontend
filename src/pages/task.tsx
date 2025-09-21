@@ -4,20 +4,35 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useListTasks } from "@/hooks/queries/use-list-tasks";
 import { TaskList } from "@/components/task-list";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Textarea } from "@/components/ui/textarea";
 
 export function Tasks() {
   const { data: tasks } = useListTasks();
   const [search, setSearch] = useState("");
-  const [newTask, setNewTask] = useState("");
   const [activeTab, setActiveTab] = useState("incomplete");
+  const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskDescription, setNewTaskDescription] = useState("");
 
   const handleAddTask = () => {
-    if (!newTask.trim()) {
-      console.log("Task cannot be empty");
+    if (!newTaskTitle.trim() || !newTaskDescription.trim()) {
+      console.log("Title and description cannot be empty");
       return;
     }
-    console.log("Adding task:", newTask);
-    setNewTask("");
+    console.log("Adding task:", {
+      title: newTaskTitle,
+      description: newTaskDescription,
+    });
+    setNewTaskTitle("");
+    setNewTaskDescription("");
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,12 +63,34 @@ export function Tasks() {
           value={search}
           onChange={handleSearch}
         />
-        <Input
-          placeholder="Add new task..."
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-        />
-        <Button onClick={handleAddTask}>Add</Button>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button>Add Task</Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Add New Task</SheetTitle>
+              <SheetDescription>
+                Fill in the details below to create a new task.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="space-y-4 p-4">
+              <Input
+                placeholder="Task Title"
+                value={newTaskTitle}
+                onChange={(e) => setNewTaskTitle(e.target.value)}
+              />
+              <Textarea
+                placeholder="Task Description"
+                value={newTaskDescription}
+                onChange={(e) => setNewTaskDescription(e.target.value)}
+              />
+            </div>
+            <SheetFooter>
+              <Button onClick={handleAddTask}>Create Task</Button>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
