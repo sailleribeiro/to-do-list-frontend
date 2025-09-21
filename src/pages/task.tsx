@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCreateTask } from "@/hooks/mutations/use-create-task";
 import { toast } from "sonner";
 import type { ListTasksResponse } from "@/services/tasks/tasks-types";
+import { TaskSkeleton } from "@/components/skeleton/task-skeleton";
 
 const activeTabs = {
   INCOMPLETE: "incomplete",
@@ -26,7 +27,7 @@ const activeTabs = {
 export type ActiveTabs = (typeof activeTabs)[keyof typeof activeTabs];
 
 export function Tasks() {
-  const { data: tasks, isLoading } = useListTasks(); // Adiciona o estado de carregamento
+  const { data: tasks, isLoading } = useListTasks();
   const createTaskMutation = useCreateTask();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(activeTabs.INCOMPLETE);
@@ -72,9 +73,8 @@ export function Tasks() {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Tasks Page</h1>
 
-      {/* Loading State */}
       {isLoading ? (
-        <p>Loading tasks...</p>
+        <TaskSkeleton />
       ) : (
         <>
           <div className="flex gap-2 mb-4">
@@ -82,6 +82,7 @@ export function Tasks() {
               placeholder="Search tasks..."
               value={search}
               onChange={handleSearch}
+              className="w-1/4"
             />
             <Sheet>
               <SheetTrigger asChild>

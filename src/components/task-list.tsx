@@ -60,7 +60,7 @@ export function TaskList({ tasks }: { tasks: ListTasksResponse[] }) {
                 {task.description}
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex justify-between items-center">
+            <CardContent className="flex justify-between items-end h-full">
               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <Button
                   variant="destructive"
