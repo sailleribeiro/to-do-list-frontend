@@ -5,9 +5,13 @@ export function useDeleteTask() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteTask,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    mutationFn: (taskId: string) => deleteTask(taskId),
+    onSuccess: (taskId) => {
+      queryClient.setQueryData(["tasks"], (oldTasks: any) => {
+        return oldTasks
+          ? oldTasks.filter((task: any) => task.id !== taskId)
+          : [];
+      });
     },
   });
 }
