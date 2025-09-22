@@ -15,8 +15,7 @@ export function DropdownUser() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="flex flex-row items-center gap-2 cursor-pointer bg-accent px-4 py-2 rounded-full hover:opacity-80 transition">
-          Ellias Ribeiro
+        <div className="flex flex-row items-center gap-2">
           <Avatar>
             <AvatarImage
               src={socialMediaLinks.githubphoto}
@@ -24,6 +23,7 @@ export function DropdownUser() {
             />
             <AvatarFallback>ER</AvatarFallback>
           </Avatar>
+          Ellias Ribeiro
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

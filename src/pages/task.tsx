@@ -20,6 +20,7 @@ import type { ListTasksResponse } from "@/services/tasks/tasks-types";
 import { TaskSkeleton } from "@/components/skeleton/task-skeleton";
 import { Plus } from "lucide-react";
 import { DropdownUser } from "@/components/dropdown-user";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const activeTabs = {
   INCOMPLETE: "incomplete",
@@ -75,7 +76,11 @@ export function Tasks() {
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold mb-4">Tasks Page</h1>
-        <DropdownUser />
+
+        <div className="flex flex-row items-center gap-2 cursor-pointer bg-accent p-2 rounded-full hover:opacity-80 transition">
+          <ModeToggle />
+          <DropdownUser />
+        </div>
       </div>
 
       {isLoading ? (
