@@ -18,6 +18,7 @@ import { useCreateTask } from "@/hooks/mutations/use-create-task";
 import { toast } from "sonner";
 import type { ListTasksResponse } from "@/services/tasks/tasks-types";
 import { TaskSkeleton } from "@/components/skeleton/task-skeleton";
+import { Plus } from "lucide-react";
 
 const activeTabs = {
   INCOMPLETE: "incomplete",
@@ -77,16 +78,19 @@ export function Tasks() {
         <TaskSkeleton />
       ) : (
         <>
-          <div className="flex gap-2 mb-4">
+          <div className="flex flex-col md:flex-row gap-2 mb-4">
             <Input
               placeholder="Search tasks..."
               value={search}
               onChange={handleSearch}
-              className="w-1/4"
+              className=" w-full md:w-1/4"
             />
             <Sheet>
               <SheetTrigger asChild>
-                <Button>Add Task</Button>
+                <Button>
+                  <Plus />
+                  Add Task
+                </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
