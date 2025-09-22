@@ -1,0 +1,61 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { socialMediaLinks } from "@/constants/social-media";
+import { Github, Linkedin, Palette } from "lucide-react";
+
+export function DropdownUser() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <div className="flex flex-row items-center gap-2">
+          <Avatar>
+            <AvatarImage
+              src={socialMediaLinks.githubphoto}
+              alt="@sailleribeiro"
+            />
+            <AvatarFallback>ER</AvatarFallback>
+          </Avatar>
+          Ellias Ribeiro
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>Discover my networks</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => {
+            window.open(socialMediaLinks.linkedin, "_blank");
+          }}
+        >
+          <Linkedin />
+          LinkedIn
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          onClick={() => {
+            window.open(socialMediaLinks.github, "_blank");
+          }}
+        >
+          <Github />
+          GitHub
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          onClick={() => {
+            window.open(socialMediaLinks.behance, "_blank");
+          }}
+        >
+          <Palette />
+          Behance
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

@@ -18,6 +18,15 @@ import { useCreateTask } from "@/hooks/mutations/use-create-task";
 import { toast } from "sonner";
 import type { ListTasksResponse } from "@/services/tasks/tasks-types";
 import { TaskSkeleton } from "@/components/skeleton/task-skeleton";
+import { Plus, X } from "lucide-react";
+import { DropdownUser } from "@/components/dropdown-user";
+import { ModeToggle } from "@/components/mode-toggle";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const activeTabs = {
   INCOMPLETE: "incomplete",
@@ -71,22 +80,44 @@ export function Tasks() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Tasks Page</h1>
+      <div className="flex flex-row items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Tasks Page</h1>
+
+        <div className="flex flex-row items-center gap-2 cursor-pointer bg-accent p-2 rounded-full hover:opacity-80 transition">
+          <ModeToggle />
+          <DropdownUser />
+        </div>
+      </div>
 
       {isLoading ? (
         <TaskSkeleton />
       ) : (
         <>
-          <div className="flex gap-2 mb-4">
+          <div className="flex flex-col md:flex-row gap-2 mb-4">
             <Input
               placeholder="Search tasks..."
               value={search}
               onChange={handleSearch}
-              className="w-1/4"
+              className=" w-full md:w-1/4"
             />
+            {search && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button variant="outline" onClick={() => setSearch("")}>
+                    <X />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>clean filter</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
             <Sheet>
               <SheetTrigger asChild>
-                <Button>Add Task</Button>
+                <Button>
+                  <Plus />
+                  Add Task
+                </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
