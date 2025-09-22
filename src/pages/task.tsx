@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import type { ListTasksResponse } from "@/services/tasks/tasks-types";
 import { TaskSkeleton } from "@/components/skeleton/task-skeleton";
 import { Plus } from "lucide-react";
+import { DropdownUser } from "@/components/dropdown-user";
 
 const activeTabs = {
   INCOMPLETE: "incomplete",
@@ -72,7 +73,10 @@ export function Tasks() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Tasks Page</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold mb-4">Tasks Page</h1>
+        <DropdownUser />
+      </div>
 
       {isLoading ? (
         <TaskSkeleton />
