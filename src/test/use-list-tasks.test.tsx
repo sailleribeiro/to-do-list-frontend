@@ -3,8 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useListTasks } from "../hooks/queries/use-list-tasks";
-import { mockTasks, emptyTasks } from "./__mocks__/data/mock-tasks";
-import { mockTaskService } from "./__mocks__/services/tasks/tasks-api";
+import { mockTasks, emptyTasks, mockTaskService } from "./__mocks__";
 
 // Aplicar mock do serviço
 vi.mock("../services/tasks/tasks-api", async () => {

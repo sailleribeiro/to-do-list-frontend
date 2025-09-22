@@ -1,8 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { TaskList } from "../components/task-list";
-import { mockTasks, emptyTasks } from "./__mocks__/data/mock-tasks";
-import { mockUseDoneTask } from "./__mocks__/hooks/mutations/use-done-task";
+import { mockTasks, emptyTasks, mockUseDoneTask } from "./__mocks__";
 
 // Aplicar os mocks
 vi.mock("../hooks/mutations/use-done-task", async () => {
