@@ -1,50 +1,33 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { TaskList } from "../components/task-list";
-import type { ListTasksResponse } from "../services/tasks/tasks-types";
+import { mockTasks, emptyTasks } from "./__mocks__/data/mock-tasks";
+import { mockUseDoneTask } from "./__mocks__/hooks/mutations/use-done-task";
 
-// Mock dos hooks customizados
-vi.mock("../hooks/mutations/use-done-task", () => ({
-  useDoneTask: () => ({
-    mutate: vi.fn(),
-    isPending: false,
-  }),
-}));
+// Aplicar os mocks
+vi.mock("../hooks/mutations/use-done-task", async () => {
+  const mock = await import("./__mocks__/hooks/mutations/use-done-task");
+  return mock;
+});
 
-vi.mock("../hooks/mutations/use-delete-task", () => ({
-  useDeleteTask: () => ({
-    mutate: vi.fn(),
-    isPending: false,
-  }),
-}));
-
-// Dados de teste simulados
-const mockTasks: ListTasksResponse[] = [
-  {
-    id: "1",
-    title: "Tarefa 1",
-    description: "Descrição da tarefa 1",
-    done: false,
-    createdAt: "2024-01-01",
-  },
-  {
-    id: "2",
-    title: "Tarefa 2",
-    description: "Descrição da tarefa 2",
-    done: true,
-    createdAt: "2024-01-02",
-  },
-];
+vi.mock("../hooks/mutations/use-delete-task", async () => {
+  const mock = await import("./__mocks__/hooks/mutations/use-delete-task");
+  return mock;
+});
 
 describe("TaskList Component", () => {
+  beforeEach(() => {
+    // Limpa os mocks antes de cada teste
+    vi.clearAllMocks();
+  });
+
   /**
    * TESTE 1: Renderização quando não há tarefas
    * Verifica se a mensagem "No tasks found" aparece quando a lista está vazia
    */
   it('should display "No tasks found" when tasks array is empty', () => {
-    render(<TaskList tasks={[]} />);
+    render(<TaskList tasks={emptyTasks} />);
 
-    // Procura pelo texto na tela
     expect(screen.getByText("No tasks found.")).toBeInTheDocument();
   });
 
@@ -71,9 +54,9 @@ describe("TaskList Component", () => {
   it("should show conclude button only for incomplete tasks", () => {
     render(<TaskList tasks={mockTasks} />);
 
-    // Deve ter apenas 1 botão "Conclude" (só para a tarefa não concluída)
+    // Deve ter 2 botões "Conclude" (para as 2 tarefas não concluídas)
     const concludeButtons = screen.getAllByText("Conclude");
-    expect(concludeButtons).toHaveLength(1);
+    expect(concludeButtons).toHaveLength(2);
   });
 
   /**
@@ -83,7 +66,6 @@ describe("TaskList Component", () => {
   it("should apply opacity styling to completed tasks", () => {
     render(<TaskList tasks={mockTasks} />);
 
-    // Busca os cards das tarefas
     const taskCards = screen
       .getAllByRole("generic")
       .filter((el) => el.className?.includes("relative border"));
@@ -99,18 +81,14 @@ describe("TaskList Component", () => {
   it("should open delete confirmation modal when trash button is clicked", async () => {
     render(<TaskList tasks={mockTasks} />);
 
-    // Busca todos os botões pela classe variant="destructive"
     const deleteButtons = screen
       .getAllByRole("button")
       .filter((button) => button.className?.includes("destructive"));
 
-    // Verifica se encontrou pelo menos um botão
     expect(deleteButtons.length).toBeGreaterThan(0);
 
-    // Clica no primeiro botão de delete
     fireEvent.click(deleteButtons[0]);
 
-    // Verifica se o modal apareceu
     await waitFor(() => {
       expect(screen.getByText("Are you sure?")).toBeInTheDocument();
       expect(
@@ -128,24 +106,33 @@ describe("TaskList Component", () => {
   it("should close modal when cancel button is clicked", async () => {
     render(<TaskList tasks={mockTasks} />);
 
-    // Busca e clica no botão de delete
     const deleteButtons = screen
       .getAllByRole("button")
       .filter((button) => button.className?.includes("destructive"));
 
     fireEvent.click(deleteButtons[0]);
 
-    // Aguarda o modal aparecer
     await waitFor(() => {
       expect(screen.getByText("Are you sure?")).toBeInTheDocument();
     });
 
-    // Clica em Cancel
     fireEvent.click(screen.getByText("Cancel"));
 
-    // Verifica se o modal desapareceu
     await waitFor(() => {
       expect(screen.queryByText("Are you sure?")).not.toBeInTheDocument();
     });
+  });
+
+  /**
+   * TESTE 7: Chamar função de marcar como concluída
+   * Verifica se a função mutate é chamada quando clica em "Conclude"
+   */
+  it("should call markAsDone when conclude button is clicked", () => {
+    render(<TaskList tasks={mockTasks} />);
+
+    const concludeButton = screen.getAllByText("Conclude")[0];
+    fireEvent.click(concludeButton);
+
+    expect(mockUseDoneTask.mutate).toHaveBeenCalledWith("1");
   });
 });
