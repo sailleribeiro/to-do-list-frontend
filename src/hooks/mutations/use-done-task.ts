@@ -1,6 +1,7 @@
 import { taskService } from "@/services/tasks/tasks-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ListTasksResponse } from "@/services/tasks/tasks-types";
+import { toast } from "sonner";
 
 export function useDoneTask() {
   const queryClient = useQueryClient();
@@ -15,9 +16,11 @@ export function useDoneTask() {
             )
           : [];
       });
+      toast.success("Task marked as done");
     },
     onError: (error) => {
       console.error("Error marking task as done:", error);
+      toast.error("Failed to mark task as done");
     },
   });
 }
