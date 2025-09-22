@@ -103,8 +103,13 @@ export function Tasks() {
             {search && (
               <Tooltip>
                 <TooltipTrigger>
-                  <Button variant="outline" onClick={() => setSearch("")}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setSearch("")}
+                    className="w-full md:w-auto"
+                  >
                     <X />
+                    <p className="md:hidden">clean filter</p>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
