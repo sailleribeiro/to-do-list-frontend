@@ -18,9 +18,15 @@ import { useCreateTask } from "@/hooks/mutations/use-create-task";
 import { toast } from "sonner";
 import type { ListTasksResponse } from "@/services/tasks/tasks-types";
 import { TaskSkeleton } from "@/components/skeleton/task-skeleton";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { DropdownUser } from "@/components/dropdown-user";
 import { ModeToggle } from "@/components/mode-toggle";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const activeTabs = {
   INCOMPLETE: "incomplete",
@@ -74,8 +80,8 @@ export function Tasks() {
 
   return (
     <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold mb-4">Tasks Page</h1>
+      <div className="flex flex-row items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Tasks Page</h1>
 
         <div className="flex flex-row items-center gap-2 cursor-pointer bg-accent p-2 rounded-full hover:opacity-80 transition">
           <ModeToggle />
@@ -94,6 +100,18 @@ export function Tasks() {
               onChange={handleSearch}
               className=" w-full md:w-1/4"
             />
+            {search && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button variant="outline" onClick={() => setSearch("")}>
+                    <X />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>clean filter</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
             <Sheet>
               <SheetTrigger asChild>
                 <Button>
