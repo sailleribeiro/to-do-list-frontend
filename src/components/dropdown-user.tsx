@@ -22,12 +22,12 @@ export function DropdownUser() {
               src={socialMediaLinks.githubphoto}
               alt="@sailleribeiro"
             />
-            <AvatarFallback>Ellias Ribeiro</AvatarFallback>
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Conheça minhas redes</DropdownMenuLabel>
+        <DropdownMenuLabel>Discover my networks</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
